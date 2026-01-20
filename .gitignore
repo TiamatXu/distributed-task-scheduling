@@ -1,0 +1,38 @@
+### Gradle ###
+.gradle
+build/
+!build/dist/
+!build/distributions/
+!build/libs/
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse ###
+.classpath
+.project
+.settings/
+
+### NetBeans ###
+nbproject/
+dist/
+nbdist/
+.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac ###
+.DS_Store
+
+### Logs ###
+logs
+*.log
+
+### Temp ###
+tmp/
+temp/
