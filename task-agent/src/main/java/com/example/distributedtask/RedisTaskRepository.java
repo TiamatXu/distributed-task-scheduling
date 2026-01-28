@@ -14,7 +14,7 @@ import java.util.Map;
 @Repository
 public class RedisTaskRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(RedisTaskRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(RedisTaskRepository.class);
     private static final String TASK_KEY_PREFIX = "task:";
 
     private final StringRedisTemplate stringRedisTemplate;
@@ -33,9 +33,9 @@ public class RedisTaskRepository {
             String taskHashKey = TASK_KEY_PREFIX + taskId;
             Map<String, String> taskMap = objectMapper.convertValue(task, Map.class);
             hashOperations.putAll(taskHashKey, taskMap);
-            log.debug("Saved task {} to Redis Hash {}", taskId, taskHashKey);
+            logger.debug("Saved task {} to Redis Hash {}", taskId, taskHashKey);
         } catch (Exception e) {
-            log.error("Failed to save task {} to Redis", task.getTaskId(), e);
+            logger.error("Failed to save task {} to Redis", task.getTaskId(), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class RedisTaskRepository {
         try {
             return objectMapper.convertValue(taskMap, Task.class);
         } catch (Exception e) {
-            log.error("Failed to deserialize task {} from Redis", taskId, e);
+            logger.error("Failed to deserialize task {} from Redis", taskId, e);
             return null;
         }
     }
@@ -56,7 +56,7 @@ public class RedisTaskRepository {
     public void updateStatus(String taskId, Task.TaskStatus status) {
         String taskHashKey = TASK_KEY_PREFIX + taskId;
         hashOperations.put(taskHashKey, "status", status.name());
-        log.debug("Updated status of task {} to {}", taskId, status);
+        logger.debug("Updated status of task {} to {}", taskId, status);
     }
 
     public void updateResult(String taskId, String result, Task.TaskStatus status) {
@@ -66,6 +66,6 @@ public class RedisTaskRepository {
         updates.put("status", status.name());
         updates.put("finishTime", String.valueOf(System.currentTimeMillis()));
         hashOperations.putAll(taskHashKey, updates);
-        log.debug("Updated result and status of task {} to {} with result {}", taskId, status, result);
+        logger.debug("Updated result and status of task {} to {} with result {}", taskId, status, result);
     }
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TaskProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(TaskProcessor.class);
     private static final String TASK_QUEUE_KEY_PREFIX = "agent:tasks:";
     private static final String AGENT_ID = "agent-001"; // TODO: Replace with dynamic agent ID
 
@@ -40,25 +40,25 @@ public class TaskProcessor {
 
     @PostConstruct
     public void init() {
-        log.info("TaskProcessor initialized. Starting task polling for agent: {}", AGENT_ID);
+        logger.info("TaskProcessor initialized. Starting task polling for agent: {}", AGENT_ID);
         executorService.submit(this::pollTasks);
     }
 
     private void pollTasks() {
         String taskQueueKey = TASK_QUEUE_KEY_PREFIX + AGENT_ID;
-        log.info("Polling for tasks on Redis list: {}", taskQueueKey);
+        logger.info("Polling for tasks on Redis list: {}", taskQueueKey);
 
         while (running) {
             try {
                 String taskJson = stringRedisTemplate.opsForList().rightPop(taskQueueKey, Duration.ofSeconds(5));
 
                 if (taskJson != null) {
-                    log.info("Received task JSON: {}", taskJson);
+                    logger.info("Received task JSON: {}", taskJson);
                     Task task = objectMapper.readValue(taskJson, Task.class);
                     task.setAgentId(AGENT_ID); // Set agent ID for the task
                     redisTaskRepository.save(task); // Save task initially
 
-                    log.info("Processing task: {}", task.getTaskId());
+                    logger.info("Processing task: {}", task.getTaskId());
 
                     // Update status to RUNNING
                     redisTaskRepository.updateStatus(task.getTaskId(), Task.TaskStatus.RUNNING);
@@ -77,7 +77,7 @@ public class TaskProcessor {
                             finalStatus = Task.TaskStatus.SUCCESS;
                         }
                     } else {
-                        log.warn("Unsupported task type for task {}: {}", task.getTaskId(), task.getType());
+                        logger.warn("Unsupported task type for task {}: {}", task.getTaskId(), task.getType());
                         executionResult = "Unsupported task type: " + task.getType();
                         finalStatus = Task.TaskStatus.FAILED;
                     }
@@ -87,21 +87,21 @@ public class TaskProcessor {
 
                     // Update final status and result in Redis
                     redisTaskRepository.updateResult(task.getTaskId(), executionResult, finalStatus);
-                    log.info("Task {} finished with status {} and result: {}", task.getTaskId(), finalStatus, executionResult);
+                    logger.info("Task {} finished with status {} and result: {}", task.getTaskId(), finalStatus, executionResult);
 
                 }
             } catch (JsonProcessingException e) {
-                log.error("Failed to deserialize task JSON", e);
+                logger.error("Failed to deserialize task JSON", e);
             } catch (Exception e) {
-                log.error("Error while polling or processing tasks", e);
+                logger.error("Error while polling or processing tasks", e);
             }
         }
-        log.info("TaskProcessor stopped polling for agent: {}", AGENT_ID);
+        logger.info("TaskProcessor stopped polling for agent: {}", AGENT_ID);
     }
 
     @PreDestroy
     public void destroy() {
-        log.info("Shutting down TaskProcessor...");
+        logger.info("Shutting down TaskProcessor...");
         running = false;
         executorService.shutdown();
         try {
@@ -112,6 +112,6 @@ public class TaskProcessor {
             executorService.shutdownNow();
             Thread.currentThread().interrupt();
         }
-        log.info("TaskProcessor shut down.");
+        logger.info("TaskProcessor shut down.");
     }
 }
