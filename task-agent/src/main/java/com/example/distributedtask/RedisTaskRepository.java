@@ -32,8 +32,7 @@ public class RedisTaskRepository {
         try {
             String taskId = task.getTaskId();
             String taskHashKey = TASK_KEY_PREFIX + taskId;
-            Map<String, String> taskMap = objectMapper.convertValue(task, new TypeReference<Map<String, String>>() {
-            });
+            Map<String, String> taskMap = objectMapper.convertValue(task, new TypeReference<Map<String, String>>() {});
             hashOperations.putAll(taskHashKey, taskMap);
             logger.debug("Saved task {} to Redis Hash {}", taskId, taskHashKey);
         } catch (Exception e) {
