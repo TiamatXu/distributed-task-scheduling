@@ -20,7 +20,9 @@ public class TaskAgentApplication {
     }
 
     @Bean
-    public CommandLineRunner run(RedisAgentService redisAgentService, ShellTaskExecutor shellTaskExecutor, StringRedisTemplate stringRedisTemplate, ObjectMapper objectMapper, RedisTaskRepository redisTaskRepository) {
+    public CommandLineRunner run(RedisAgentService redisAgentService, ShellTaskExecutor shellTaskExecutor,
+                                 StringRedisTemplate stringRedisTemplate, ObjectMapper objectMapper,
+                                 RedisTaskRepository redisTaskRepository) {
         return args -> {
             logger.info("--- Starting TaskAgentApplication Test ---");
 
@@ -67,7 +69,6 @@ public class TaskAgentApplication {
             logger.info("\n--- TaskAgentApplication Test Finished ---");
         };
     }
-
 }
 
 
