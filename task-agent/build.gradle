@@ -6,4 +6,5 @@ dependencies {
     implementation 'org.apache.curator:curator-framework:5.2.1'
     implementation 'org.apache.zookeeper:zookeeper:3.8.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
