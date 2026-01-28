@@ -53,7 +53,7 @@ public class TaskAgentApplication {
                 System.out.println("Task Result: " + finalTaskState.getResult());
                 System.out.println("Finish Time: " + (finalTaskState.getFinishTime() != null ? new java.util.Date(finalTaskState.getFinishTime()) : "N/A"));
 
-                if (finalTaskState.getStatus() == Task.TaskStatus.SUCCESS && finalTaskState.getResult().contains("Taskcompleted.")) {
+                if (finalTaskState.getStatus() == Task.TaskStatus.SUCCESS && finalTaskState.getResult().contains("Task completed.")) {
                     System.out.println("Full MVP flow verified successfully!");
                 } else {
                     System.err.println("MVP flow verification failed. Check task status/result.");
