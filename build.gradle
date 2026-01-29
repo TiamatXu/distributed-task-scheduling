@@ -19,11 +19,10 @@ allprojects {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:2.7.18"
             mavenBom "org.apache.dubbo:dubbo-bom:3.2.9"
+            mavenBom "org.apache.curator:apache-curator:5.2.1"
         }
         dependencies {
-            dependency 'org.apache.curator:curator-framework:5.2.1'
             dependency 'org.apache.zookeeper:zookeeper:3.8.0'
-            dependency 'org.apache.curator:curator-recipes:5.2.1'
         }
     }
 
@@ -48,6 +47,14 @@ allprojects {
 
 subprojects {
     apply plugin: 'org.springframework.boot'
+
+    sourceSets {
+        main {
+            resources {
+                srcDirs += rootProject.file("src/main/resources")
+            }
+        }
+    }
 
     dependencies {
         // Common dependencies for all sub-modules can be added here
