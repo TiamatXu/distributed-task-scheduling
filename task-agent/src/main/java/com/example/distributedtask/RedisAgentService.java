@@ -14,6 +14,8 @@ public class RedisAgentService {
 
     public RedisAgentService(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
+        assert stringRedisTemplate.getConnectionFactory() != null;
+        stringRedisTemplate.getConnectionFactory().getConnection().setClientName("RedisAgentServiceClient".getBytes());
         logger.info("RedisAgentService initialized. Connected to Redis at {}:{}",
                 stringRedisTemplate.getConnectionFactory().getConnection().ping(),
                 stringRedisTemplate.getConnectionFactory().getConnection().getClientName());
