@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.17'
+    id 'org.springframework.boot' version '2.7.18'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
 }
@@ -17,8 +17,13 @@ allprojects {
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:2.7.17"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:2.7.18"
             mavenBom "org.apache.dubbo:dubbo-bom:3.2.9"
+        }
+        dependencies {
+            dependency 'org.apache.curator:curator-framework:5.2.1'
+            dependency 'org.apache.zookeeper:zookeeper:3.8.0'
+            dependency 'org.apache.curator:curator-recipes:5.2.1'
         }
     }
 
@@ -28,12 +33,16 @@ allprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
-    tasks.withType(Test) {
-        useJUnitPlatform()
+    tasks.withType(Test).tap {
+        configureEach {
+            useJUnitPlatform()
+        }
     }
 }
 

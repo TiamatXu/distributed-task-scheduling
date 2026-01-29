@@ -3,8 +3,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'org.apache.curator:curator-framework:5.2.1'
-    implementation 'org.apache.zookeeper:zookeeper:3.8.0'
+    implementation 'org.apache.curator:curator-framework'
+    implementation 'org.apache.zookeeper:zookeeper'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
