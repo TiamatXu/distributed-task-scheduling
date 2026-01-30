@@ -36,7 +36,7 @@
     </appender>
 
     <!-- 为您的项目包配置日志级别 -->
-    <logger name="com.example.distributedtask" level="DEBUG"/>
+    <logger name="io.github.tiamatxu.distributedtask" level="DEBUG"/>
 
     <!-- 根 Logger 配置 -->
     <root level="INFO">
