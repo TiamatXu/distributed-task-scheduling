@@ -1,6 +1,6 @@
-package com.example.distributedtask;
+package io.github.tiamatxu.distributedtask;
 
-import com.example.distributedtask.task.Task;
+import io.github.tiamatxu.distributedtask.task.Task;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

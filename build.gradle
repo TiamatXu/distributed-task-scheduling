@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = 'com.example.distributedtask'
+    group = 'io.github.tiamatxu.distributedtask'
     version = '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
@@ -51,7 +51,7 @@ subprojects {
     sourceSets {
         main {
             resources {
-                srcDirs += rootProject.file("src/main/resources")
+                srcDirs += files("$rootDir/src/main/resources")
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.distributedtask;
+package io.github.tiamatxu.distributedtask;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

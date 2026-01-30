@@ -1,4 +1,4 @@
-package com.example.distributedtask.task;
+package io.github.tiamatxu.distributedtask.task;
 
 import lombok.Data;
 
