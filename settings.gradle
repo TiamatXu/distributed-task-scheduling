@@ -1,6 +1,3 @@
 rootProject.name = 'distributed-task-scheduling'
 
-include 'task-api'
-include 'task-manager'
-include 'task-scheduler'
-include 'task-agent'
+include 'task-api', 'task-manager', 'task-scheduler', 'task-agent', 'practice-area'
