@@ -62,6 +62,11 @@ subprojects {
                 srcDirs += files("$rootDir/src/main/resources")
             }
         }
+        test {
+            resources {
+                srcDirs += files("$rootDir/src/test/resources")
+            }
+        }
     }
 
     dependencies {
