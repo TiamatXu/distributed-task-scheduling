@@ -2,8 +2,14 @@
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <property name="LOG_BASE_DIR" value="./logs"/>
+    <property name="LOG_BASE_DIR" value="logs"/>
     <property name="LOG_FILE_NAME" value="spring"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_BASE_DIR}/${LOG_FILE_NAME}.log</file>
@@ -16,26 +22,26 @@
         </rollingPolicy>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
         </encoder>
     </appender>
 
     <springProfile name="dev">
-        <logger name="io.github.tiamatxu" level="INFO" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </logger>
         <root level="WARN">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </root>
+        <logger name="io.github.tiamatxu" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </logger>
     </springProfile>
 
     <springProfile name="prod">
         <appender name="FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
             <appender-ref ref="FILE"/>
-            <queueSize>256</queueSize>
+            <queueSize>512</queueSize>
             <discardingThreshold>0</discardingThreshold>
+            <neverBlock>true</neverBlock>
             <includeCallerData>true</includeCallerData>
         </appender>
         <root level="INFO">
