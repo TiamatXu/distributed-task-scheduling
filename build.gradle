@@ -34,10 +34,6 @@ allprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
-        testImplementation 'org.testcontainers:testcontainers:1.19.7'
-        testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
-        testImplementation 'org.testcontainers:kafka:1.19.7'
-        testImplementation 'org.slf4j:slf4j-simple:1.7.32'
     }
 
     tasks.withType(JavaCompile).configureEach {
