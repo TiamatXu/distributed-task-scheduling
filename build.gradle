@@ -55,12 +55,12 @@ subprojects {
     sourceSets {
         main {
             resources {
-                srcDirs += files("$rootDir/src/main/resources")
+                srcDirs += files("$rootDir/resources")
             }
         }
         test {
             resources {
-                srcDirs += files("$rootDir/src/test/resources")
+                srcDirs += files("$rootDir/resources")
             }
         }
     }
