@@ -2,12 +2,12 @@
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <property name="LOG_BASE_DIR" value="logs"/>
+    <property name="LOG_DIR" value="logs"/>
 
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_BASE_DIR}/${moduleName:-spring}/spring.log</file>
+        <file>${LOG_DIR}/spring.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_BASE_DIR}/${moduleName:-spring}/spring-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/spring-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
             <maxHistory>7</maxHistory>
             <totalSizeCap>200MB</totalSizeCap>

@@ -54,7 +54,6 @@ bootJar {
 }
 
 subprojects {
-    buildDir = new File(rootProject.buildDir, name)
 
     apply plugin: 'org.springframework.boot'
 
@@ -73,9 +72,5 @@ subprojects {
 
     dependencies {
         // Common dependencies for all sub-modules can be added here
-    }
-
-    tasks.withType(JavaExec) {
-        systemProperty 'moduleName', project.name
     }
 }
