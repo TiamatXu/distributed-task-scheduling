@@ -3,3 +3,7 @@ dependencies {
     implementation 'org.apache.curator:curator-recipes'
     implementation 'org.apache.curator:curator-framework'
 }
+
+bootJar {
+    enabled = false
+}
