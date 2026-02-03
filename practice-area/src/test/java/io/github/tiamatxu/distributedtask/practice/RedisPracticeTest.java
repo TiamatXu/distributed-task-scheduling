@@ -25,10 +25,10 @@ class RedisPracticeTest {
             props.load(input);
         }
 
-        String host = props.getProperty("redis.host");
-        String user = props.getProperty("redis.user");
-        String password = props.getProperty("redis.password");
-        int port = Integer.parseInt(props.getProperty("redis.port"));
+        String host = props.getProperty("redis.host", "localhost");
+        String user = props.getProperty("redis.user", "");
+        String password = props.getProperty("redis.password", "");
+        int port = Integer.parseInt(props.getProperty("redis.port", "6379"));
         
         System.out.println("Connecting to Redis at " + host + ":" + port);
 

@@ -1,5 +1,7 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-    // This plugin is applied to subprojects individually, not the root project
+    // 插件单独应用于子项目，非根项目
     id 'org.springframework.boot' version '2.7.18' apply false
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
@@ -16,7 +18,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'org.springframework.boot'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -34,53 +35,55 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         useJUnitPlatform()
     }
-
-    // Configure layered JARs for all subprojects that are applications
-    tasks.named('bootJar') {
-        layered {
-            enabled = true
-        }
-    }
 }
 
-// Configuration for the common library, which is not a Spring Boot application
+// 通用依赖，非 SpringBoot 应用
 project(':task-common') {
     apply plugin: 'java-library'
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
+}
+
+project(':practice-area') {
+    dependencies {
+        implementation 'redis.clients:jedis'
+        implementation 'org.apache.curator:curator-recipes:5.2.1'
+        implementation 'org.apache.curator:curator-framework:5.2.1'
     }
 }
 
-// Configuration for all service applications
+// 所有服务应用程序的配置
 def serviceModules = [':task-api', ':task-manager', ':task-scheduler', ':task-agent-java']
 serviceModules.each { moduleName ->
     project(moduleName) {
+        apply plugin: 'org.springframework.boot'
         dependencies {
-            // All services depend on the common library
+            // 所有服务都依赖于通用模块
             implementation project(':task-common')
             implementation 'org.springframework.boot:spring-boot-starter'
+        }
+        // 为所有作为应用程序的子项目配置分层 JAR
+        tasks.named('bootJar', BootJar) {
+            layered {
+                enabled = true
+            }
         }
     }
 }
 
-// Specific dependencies for each service
+// 每个服务的具体依赖项
 project(':task-api') {
     springBoot {
         mainClass = 'io.github.tiamatxu.distributedtask.api.TaskApiApplication'
     }
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        // Dubbo dependency can be added here if needed
+        // 如果需要，可以在此处添加 Dubbo 依赖
         // implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
     }
 }
