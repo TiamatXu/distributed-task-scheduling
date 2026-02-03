@@ -1,76 +1,119 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.18'
+    // This plugin is applied to subprojects individually, not the root project
+    id 'org.springframework.boot' version '2.7.18' apply false
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id 'java'
 }
 
 allprojects {
     group = 'io.github.tiamatxu.distributedtask'
     version = '0.0.1-SNAPSHOT'
 
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
-
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     dependencyManagement {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:2.7.18"
             mavenBom "org.apache.dubbo:dubbo-bom:3.2.9"
-            mavenBom "org.apache.curator:apache-curator:5.2.1"
-        }
-        dependencies {
-            dependency 'redis.clients:jedis:4.4.3'
-            dependency 'org.apache.zookeeper:zookeeper:3.8.0'
         }
     }
 
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testCompileOnly 'org.projectlombok:lombok'
-        testAnnotationProcessor 'org.projectlombok:lombok'
     }
 
-    tasks.withType(JavaCompile).configureEach {
+    tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
     }
 
-    tasks.withType(Test).tap {
-        configureEach {
-            useJUnitPlatform()
+    tasks.withType(Test) {
+        useJUnitPlatform()
+    }
+
+    // Configure layered JARs for all subprojects that are applications
+    tasks.named('bootJar') {
+        layered {
+            enabled = true
         }
     }
 }
 
-bootJar {
-    enabled = false
+// Configuration for the common library, which is not a Spring Boot application
+project(':task-common') {
+    apply plugin: 'java-library'
+    bootJar {
+        enabled = false
+    }
+    jar {
+        enabled = true
+    }
 }
 
-subprojects {
-
-    apply plugin: 'org.springframework.boot'
-
-    sourceSets {
-        main {
-            resources {
-                srcDirs += files("$rootDir/resources")
-            }
-        }
-        test {
-            resources {
-                srcDirs += files("$rootDir/resources")
-            }
+// Configuration for all service applications
+def serviceModules = [':task-api', ':task-manager', ':task-scheduler', ':task-agent-java']
+serviceModules.each { moduleName ->
+    project(moduleName) {
+        dependencies {
+            // All services depend on the common library
+            implementation project(':task-common')
+            implementation 'org.springframework.boot:spring-boot-starter'
         }
     }
+}
 
+// Specific dependencies for each service
+project(':task-api') {
+    springBoot {
+        mainClass = 'io.github.tiamatxu.distributedtask.api.TaskApiApplication'
+    }
     dependencies {
-        // Common dependencies for all sub-modules can be added here
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        // Dubbo dependency can be added here if needed
+        // implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+    }
+}
+
+project(':task-manager') {
+    springBoot {
+        mainClass = 'io.github.tiamatxu.distributedtask.manager.TaskManagerApplication'
+    }
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation 'org.springframework.kafka:spring-kafka'
+    }
+}
+
+project(':task-scheduler') {
+    springBoot {
+        mainClass = 'io.github.tiamatxu.distributedtask.scheduler.TaskSchedulerApplication'
+    }
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation 'org.springframework.kafka:spring-kafka'
+        implementation 'org.apache.zookeeper:zookeeper:3.8.0'
+        implementation 'org.apache.curator:curator-framework:5.2.1'
+        implementation 'org.apache.curator:curator-recipes:5.2.1'
+    }
+}
+
+project(':task-agent-java') {
+    springBoot {
+        mainClass = 'io.github.tiamatxu.distributedtask.agent.java.TaskAgentApplication'
+    }
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation 'com.fasterxml.jackson.core:jackson-databind'
     }
 }
