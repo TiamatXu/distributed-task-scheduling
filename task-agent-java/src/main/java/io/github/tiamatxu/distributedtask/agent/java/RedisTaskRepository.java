@@ -3,6 +3,7 @@ package io.github.tiamatxu.distributedtask.agent.java;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.tiamatxu.distributedtask.common.dto.Task;
+import io.github.tiamatxu.distributedtask.common.enums.TaskStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.HashOperations;
@@ -54,13 +55,13 @@ public class RedisTaskRepository {
         }
     }
 
-    public void updateStatus(String taskId, Task.TaskStatus status) {
+    public void updateStatus(String taskId, TaskStatus status) {
         String taskHashKey = TASK_KEY_PREFIX + taskId;
         hashOperations.put(taskHashKey, "status", status.name());
         logger.debug("Updated status of task {} to {}", taskId, status);
     }
 
-    public void updateResult(String taskId, String result, Task.TaskStatus status) {
+    public void updateResult(String taskId, String result, TaskStatus status) {
         String taskHashKey = TASK_KEY_PREFIX + taskId;
         Map<String, String> updates = new HashMap<>();
         updates.put("result", result);

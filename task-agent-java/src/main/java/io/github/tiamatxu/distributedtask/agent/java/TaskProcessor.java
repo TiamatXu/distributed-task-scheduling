@@ -15,6 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import io.github.tiamatxu.distributedtask.common.enums.TaskStatus;
+import io.github.tiamatxu.distributedtask.common.enums.TaskType;
+
 @Component
 public class TaskProcessor {
 
@@ -61,25 +64,25 @@ public class TaskProcessor {
                     logger.info("Processing task: {}", task.getTaskId());
 
                     // Update status to RUNNING
-                    redisTaskRepository.updateStatus(task.getTaskId(), Task.TaskStatus.RUNNING);
-                    task.setStatus(Task.TaskStatus.RUNNING); // Update local object too
+                    redisTaskRepository.updateStatus(task.getTaskId(), TaskStatus.RUNNING);
+                    task.setStatus(TaskStatus.RUNNING); // Update local object too
                     task.setStartTime(System.currentTimeMillis());
 
                     String executionResult;
-                    Task.TaskStatus finalStatus;
+                    TaskStatus finalStatus;
 
-                    if (task.getType() == Task.TaskType.SHELL) {
+                    if (task.getType() == TaskType.SHELL) {
                         executionResult = shellTaskExecutor.execute(task.getPayload());
                         // Determine final status based on executionResult (simple check for now)
                         if (executionResult.startsWith("Command failed") || executionResult.contains("Error executing command")) {
-                            finalStatus = Task.TaskStatus.FAILED;
+                            finalStatus = TaskStatus.FAILED;
                         } else {
-                            finalStatus = Task.TaskStatus.SUCCESS;
+                            finalStatus = TaskStatus.SUCCESS;
                         }
                     } else {
                         logger.warn("Unsupported task type for task {}: {}", task.getTaskId(), task.getType());
                         executionResult = "Unsupported task type: " + task.getType();
-                        finalStatus = Task.TaskStatus.FAILED;
+                        finalStatus = TaskStatus.FAILED;
                     }
                     task.setResult(executionResult);
                     task.setFinishTime(System.currentTimeMillis());

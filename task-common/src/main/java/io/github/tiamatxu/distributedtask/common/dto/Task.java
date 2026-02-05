@@ -1,5 +1,7 @@
 package io.github.tiamatxu.distributedtask.common.dto;
 
+import io.github.tiamatxu.distributedtask.common.enums.TaskStatus;
+import io.github.tiamatxu.distributedtask.common.enums.TaskType;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,20 +27,5 @@ public class Task implements Serializable {
         this.taskId = UUID.randomUUID().toString();
         this.creationTime = System.currentTimeMillis();
         this.status = TaskStatus.PENDING;
-    }
-
-    public enum TaskType {
-        SHELL,
-        PYTHON_SCRIPT
-    }
-
-    public enum TaskStatus {
-        PENDING,      // 待调度
-        SCHEDULED,    // 已被调度器选中
-        DISPATCHED,   // 已发送给 Agent
-        RUNNING,      // 正在 Agent 上执行
-        SUCCESS,      // 执行成功
-        FAILED,       // 执行失败
-        CANCELLED     // 被取消
     }
 }

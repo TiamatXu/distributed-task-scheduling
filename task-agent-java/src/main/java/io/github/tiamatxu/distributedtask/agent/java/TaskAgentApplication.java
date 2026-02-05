@@ -2,6 +2,8 @@ package io.github.tiamatxu.distributedtask.agent.java;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.tiamatxu.distributedtask.common.dto.Task;
+import io.github.tiamatxu.distributedtask.common.enums.TaskStatus;
+import io.github.tiamatxu.distributedtask.common.enums.TaskType;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +27,7 @@ public class TaskAgentApplication {
             // 1. Create a sample Task
             Task sampleTask = new Task();
             sampleTask.setName("Test Shell Task");
-            sampleTask.setType(Task.TaskType.SHELL);
+            sampleTask.setType(TaskType.SHELL);
             sampleTask.setPayload("echo Hello from produced task! && sleep 1 && echo Task completed.");
             sampleTask.setRetryCount(0); // No retries for this test
 
@@ -53,7 +55,7 @@ public class TaskAgentApplication {
                 System.out.println("Task Result: " + finalTaskState.getResult());
                 System.out.println("Finish Time: " + (finalTaskState.getFinishTime() != null ? new java.util.Date(finalTaskState.getFinishTime()) : "N/A"));
 
-                if (finalTaskState.getStatus() == Task.TaskStatus.SUCCESS && finalTaskState.getResult().contains("Task completed.")) {
+                if (finalTaskState.getStatus() == TaskStatus.SUCCESS && finalTaskState.getResult().contains("Task completed.")) {
                     System.out.println("Full MVP flow verified successfully!");
                 } else {
                     System.err.println("MVP flow verification failed. Check task status/result.");
