@@ -26,7 +26,6 @@ subprojects {
             mavenBom "org.apache.curator:apache-curator:5.2.1"
         }
         dependencies {
-            dependency 'redis.clients:jedis:4.4.3'
             dependency 'org.apache.zookeeper:zookeeper:3.8.0'
         }
     }
