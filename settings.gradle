@@ -1,9 +1,8 @@
 rootProject.name = 'DebugServer'
 
 include ':practice-area'
-
-include ':task-common'
 include ':task-agent-java'
 include ':task-api'
+include ':task-common'
 include ':task-manager'
 include ':task-scheduler'

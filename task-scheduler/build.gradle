@@ -3,14 +3,17 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 apply plugin: 'org.springframework.boot'
 
 springBoot {
-    mainClass = 'io.github.tiamatxu.distributedtask.agent.java.TaskAgentApplication'
+    mainClass = 'io.github.tiamatxu.distributedtask.scheduler.TaskSchedulerApplication'
 }
 
 dependencies {
     implementation project(':task-common')
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.zookeeper:zookeeper'
+    implementation 'org.apache.curator:curator-framework'
+    implementation 'org.apache.curator:curator-recipes'
 }
 
 tasks.named('bootJar', BootJar) {

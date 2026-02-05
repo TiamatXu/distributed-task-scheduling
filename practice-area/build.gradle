@@ -1,0 +1,5 @@
+dependencies {
+    implementation 'redis.clients:jedis'
+    implementation 'org.apache.curator:curator-recipes'
+    implementation 'org.apache.curator:curator-framework'
+}

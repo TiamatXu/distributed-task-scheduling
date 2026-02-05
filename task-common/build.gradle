@@ -1,2 +1,1 @@
-// All common configurations are now in the root build.gradle file.
-// This file can be used for module-specific configurations if needed in the future.
+apply plugin: 'java-library'

@@ -1,7 +1,4 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
-    // 插件单独应用于子项目，非根项目
     id 'org.springframework.boot' version '2.7.18' apply false
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
@@ -46,84 +43,5 @@ subprojects {
 
     tasks.withType(Test).configureEach {
         useJUnitPlatform()
-    }
-}
-
-// 通用依赖，非 SpringBoot 应用
-project(':task-common') {
-    apply plugin: 'java-library'
-}
-
-project(':practice-area') {
-    dependencies {
-        implementation 'redis.clients:jedis'
-        implementation 'org.apache.curator:curator-recipes'
-        implementation 'org.apache.curator:curator-framework'
-
-    }
-}
-
-// 所有服务应用程序的配置
-def serviceModules = [':task-api', ':task-manager', ':task-scheduler', ':task-agent-java']
-serviceModules.each { moduleName ->
-    project(moduleName) {
-        apply plugin: 'org.springframework.boot'
-        dependencies {
-            // 所有服务都依赖于通用模块
-            implementation project(':task-common')
-            implementation 'org.springframework.boot:spring-boot-starter'
-        }
-        // 为所有作为应用程序的子项目配置分层 JAR
-        tasks.named('bootJar', BootJar) {
-            layered {
-                enabled = true
-            }
-        }
-    }
-}
-
-// 每个服务的具体依赖项
-project(':task-api') {
-    springBoot {
-        mainClass = 'io.github.tiamatxu.distributedtask.api.TaskApiApplication'
-    }
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        // 如果需要，可以在此处添加 Dubbo 依赖
-//        implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
-    }
-}
-
-project(':task-manager') {
-    springBoot {
-        mainClass = 'io.github.tiamatxu.distributedtask.manager.TaskManagerApplication'
-    }
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation 'org.springframework.kafka:spring-kafka'
-    }
-}
-
-project(':task-scheduler') {
-    springBoot {
-        mainClass = 'io.github.tiamatxu.distributedtask.scheduler.TaskSchedulerApplication'
-    }
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation 'org.springframework.kafka:spring-kafka'
-        implementation 'org.apache.zookeeper:zookeeper'
-        implementation 'org.apache.curator:curator-framework'
-        implementation 'org.apache.curator:curator-recipes'
-    }
-}
-
-project(':task-agent-java') {
-    springBoot {
-        mainClass = 'io.github.tiamatxu.distributedtask.agent.java.TaskAgentApplication'
-    }
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation 'com.fasterxml.jackson.core:jackson-databind'
-        implementation 'org.springframework.boot:spring-boot-starter-json'
     }
 }
