@@ -8,9 +8,13 @@ springBoot {
 
 dependencies {
     implementation project(':task-common')
+    implementation project(':task-config')
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 tasks.named('bootJar', BootJar) {
