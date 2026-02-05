@@ -36,3 +36,6 @@ logs
 ### Temp ###
 tmp/
 temp/
+
+### Fast Request ###
+.fastrequest/
