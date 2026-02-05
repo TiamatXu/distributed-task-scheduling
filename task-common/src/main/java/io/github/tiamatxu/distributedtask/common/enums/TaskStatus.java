@@ -1,11 +1,36 @@
 package io.github.tiamatxu.distributedtask.common.enums;
 
+/**
+ * 任务状态枚举
+ * eg: PENDING, SCHEDULED, DISPATCHED, RUNNING, SUCCESS, FAILED, CANCELLED
+ */
 public enum TaskStatus {
-        PENDING,      // 待调度
-        SCHEDULED,    // 已被调度器选中
-        DISPATCHED,   // 已发送给 Agent
-        RUNNING,      // 正在 Agent 上执行
-        SUCCESS,      // 执行成功
-        FAILED,       // 执行失败
-        CANCELLED     // 被取消
-    }
+    /**
+     * 待调度
+     */
+    PENDING,
+    /**
+     * 已被调度器选中
+     */
+    SCHEDULED,
+    /**
+     * 已发送给 Worker Agent
+     */
+    DISPATCHED,
+    /**
+     * 正在 Worker Agent 上执行
+     */
+    RUNNING,
+    /**
+     * 执行成功
+     */
+    SUCCESS,
+    /**
+     * 执行失败
+     */
+    FAILED,
+    /**
+     * 任务被取消
+     */
+    CANCELLED
+}

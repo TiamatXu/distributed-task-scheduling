@@ -14,10 +14,10 @@ public class Task implements Serializable {
     private String taskId;
     private String name;
     private TaskType type;
-    private String payload; // e.g., shell command, Python script content
+    private String payload;
     private TaskStatus status;
-    private String agentId; // Which agent is executing the task
-    private String result; // Execution result
+    private String agentId;
+    private String result;
     private Long creationTime;
     private Long startTime;
     private Long finishTime;
